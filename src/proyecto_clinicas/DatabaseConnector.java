@@ -12,20 +12,20 @@ public class DatabaseConnector {
     private static Connection mysqlConnection = null;
 
     // Configuración para Oracle
-    private static final String ORACLE_JDBC_URL = "jdbc:oracle:thin:@//dbclinica.cbawooi4y27d.us-east-2.rds.amazonaws.com:1521/DBCLINIC";
+    private static final String ORACLE_JDBC_URL = "jdbc:oracle:thin:@//oracledb.cbawooi4y27d.us-east-2.rds.amazonaws.com:1521/DBCLINIC";
     private static final String ORACLE_USER = "admin";
     private static final String ORACLE_PASSWORD = "BWDclinicaDB";
 
     // Configuración para MySQL
-    private static final String MYSQL_JDBC_URL = "jdbc:mysql://mysqldb.cbawooi4y27d.us-east-2.rds.amazonaws.com:3306/DBCLINICA";
+    private static final String MYSQL_JDBC_URL = "jdbc:mysql://mysqldb.cbawooi4y27d.us-east-2.rds.amazonaws.com:3306/DB-Clinic?zeroDateTimeBehavior=CONVERT_TO_NULL";
     private static final String MYSQL_USER = "admin";
     private static final String MYSQL_PASSWORD = "BWDclinicaDB";
 
     // Bloque estático para registrar drivers
     static {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("oracle.jdbc.OracleDriver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("Error al cargar los drivers JDBC");

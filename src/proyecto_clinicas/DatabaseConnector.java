@@ -33,7 +33,7 @@ public class DatabaseConnector {
     }
 
     // Constructor privado para evitar instanciación
-    private DatabaseConnector() {
+    public DatabaseConnector() {
     }
 
     // Obtiene conexión a Oracle
@@ -46,6 +46,7 @@ public class DatabaseConnector {
 
             oracleConnection = DriverManager.getConnection(ORACLE_JDBC_URL, props);
             oracleConnection.setAutoCommit(false); // Para controlar transacciones manualmente
+            System.out.println("coneccion exitosa");
         }
         return oracleConnection;
     }
@@ -61,6 +62,7 @@ public class DatabaseConnector {
 
             mysqlConnection = DriverManager.getConnection(MYSQL_JDBC_URL, props);
             mysqlConnection.setAutoCommit(false);
+               System.out.println("coneccion exitosa");
         }
         return mysqlConnection;
     }

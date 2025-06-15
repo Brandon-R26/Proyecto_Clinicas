@@ -53,6 +53,7 @@ public class DatabaseConnector {
 
     // Obtiene conexión a MySQL
     //branch?
+    //hola
     public static Connection getMySQLConnection() throws SQLException {
         if (mysqlConnection == null || mysqlConnection.isClosed()) {
             Properties props = new Properties();

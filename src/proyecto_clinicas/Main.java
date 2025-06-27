@@ -106,9 +106,6 @@ public class Main extends javax.swing.JFrame {
         Btn_Replicar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTable_Base1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jC_Base1 = new javax.swing.JComboBox<>();
-        jC_Base2 = new javax.swing.JComboBox<>();
         jC_Tabla = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_Base2 = new javax.swing.JTable();
@@ -156,29 +153,6 @@ public class Main extends javax.swing.JFrame {
             JTable_Base1.getColumnModel().getColumn(4).setResizable(false);
             JTable_Base1.getColumnModel().getColumn(5).setResizable(false);
         }
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("---->");
-
-        jC_Base1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Oracle", "MySQL" }));
-        jC_Base1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jC_Base1ItemStateChanged(evt);
-            }
-        });
-        jC_Base1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jC_Base1PropertyChange(evt);
-            }
-        });
-
-        jC_Base2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MySQL", "Oracle" }));
-        jC_Base2.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jC_Base2ItemStateChanged(evt);
-            }
-        });
 
         jC_Tabla.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "paciente", "clinica", "doctor", "cita", "historial_medico", "receta ", "medicamento", "receta_medicamento " }));
         jC_Tabla.addItemListener(new java.awt.event.ItemListener() {
@@ -248,22 +222,14 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(196, 196, 196))
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(Btn_Replicar)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(83, 83, 83))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(503, 503, 503)
-                        .addComponent(jC_Base1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel1)))
+                        .addGap(83, 83, 83)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jC_Base2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,12 +254,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addComponent(Btn_Replicar)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jC_Base1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jC_Base2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(74, 74, 74))
+                .addGap(126, 126, 126))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -309,43 +270,6 @@ public class Main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jC_Base1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jC_Base1PropertyChange
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jC_Base1PropertyChange
-
-    private void jC_Base1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_Base1ItemStateChanged
-        // TODO add your handling code here:
-        DefaultComboBoxModel m1 =(DefaultComboBoxModel) jC_Base1.getModel();
-        DefaultComboBoxModel m2 =(DefaultComboBoxModel) jC_Base2.getModel();
-
-        if(m1.getSelectedItem().equals("Oracle")){
-           m2.setSelectedItem("MySQL");
-
-        }else if(m1.getSelectedItem().equals("MySQL")){
-           m2.setSelectedItem("Oracle");
-        }
-        jC_Base2.setModel(m2);
-     
-         
-        
-    }//GEN-LAST:event_jC_Base1ItemStateChanged
-
-    private void jC_Base2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_Base2ItemStateChanged
-        // TODO add your handling code here:
-         DefaultComboBoxModel m1 =(DefaultComboBoxModel) jC_Base1.getModel();
-        DefaultComboBoxModel m2 =(DefaultComboBoxModel) jC_Base2.getModel();
-
-        if(m2.getSelectedItem().equals("Oracle")){
-           m1.setSelectedItem("MySQL");
-
-        }else if(m2.getSelectedItem().equals("MySQL")){
-           m1.setSelectedItem("Oracle");
-        }
-        jC_Base1.setModel(m1);
-     
-         
-    }//GEN-LAST:event_jC_Base2ItemStateChanged
 
     private void Btn_ReplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_ReplicarActionPerformed
       
@@ -405,10 +329,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Replicar;
     private javax.swing.JTable JTable_Base1;
-    private javax.swing.JComboBox<String> jC_Base1;
-    private javax.swing.JComboBox<String> jC_Base2;
     private javax.swing.JComboBox<String> jC_Tabla;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

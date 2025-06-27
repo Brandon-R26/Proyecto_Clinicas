@@ -12,14 +12,15 @@ public class DatabaseConnector {
     private static Connection mysqlConnection = null;
 
     // Configuración para Oracle
-    private static final String ORACLE_JDBC_URL = "jdbc:oracle:thin:@//oracledb.cbawooi4y27d.us-east-2.rds.amazonaws.com:1521/DBCLINIC";
-    private static final String ORACLE_USER = "admin";
-    private static final String ORACLE_PASSWORD = "BWDclinicaDB";
+    private static final String ORACLE_JDBC_URL = "jdbc:oracle:thin:@//20.185.224.121:1521/ORCLPDB";
+    private static final String ORACLE_USER = "administrador";
+    private static final String ORACLE_PASSWORD = "W8xd7YKmk9sYWwJn09SgJTMGHw0qvR";
 
     // Configuración para MySQL
-    private static final String MYSQL_JDBC_URL = "jdbc:mysql://mysqldb.cbawooi4y27d.us-east-2.rds.amazonaws.com:3306/DB-Clinic?zeroDateTimeBehavior=CONVERT_TO_NULL";
-    private static final String MYSQL_USER = "admin";
-    private static final String MYSQL_PASSWORD = "BWDclinicaDB";
+    private static final String MYSQL_JDBC_URL = "jdbc:mysql://clinica-mysql.mysql.database.azure.com:3306/clinica?useSSL=true&requireSSL=true&verifyServerCertificate=false&zeroDateTimeBehavior=CONVERT_TO_NULL";
+
+    private static final String MYSQL_USER = "userclinicasql";
+    private static final String MYSQL_PASSWORD = "W8xd7YKmk9sYWwJn09SgJTMGHw0qvR";
 
     // Bloque estático para registrar drivers
     static {
@@ -60,7 +61,7 @@ public class DatabaseConnector {
             props.setProperty("user", MYSQL_USER);
             props.setProperty("password", MYSQL_PASSWORD);
             props.setProperty("connectTimeout", "2000");
-            props.setProperty("useSSL", "false");
+           // props.setProperty("useSSL", "false");
 
             mysqlConnection = DriverManager.getConnection(MYSQL_JDBC_URL, props);
             mysqlConnection.setAutoCommit(false);

@@ -37,7 +37,7 @@ public class Main extends javax.swing.JFrame {
             coneccionMySQL = dbConnector.getMySQLConnection();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+             traducirError(ex);
         }
      
    inicartbale2();
@@ -124,6 +124,7 @@ public class Main extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -214,6 +215,13 @@ public class Main extends javax.swing.JFrame {
 
         jLabel5.setText("MySQL");
 
+        jButton1.setText("Refresh table");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -221,9 +229,15 @@ public class Main extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(69, 69, 69)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(121, 121, 121)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(206, 206, 206))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(187, 187, 187)
                 .addComponent(jLabel2)
@@ -252,6 +266,8 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -302,21 +318,24 @@ public class Main extends javax.swing.JFrame {
         } catch (SQLException ex) {
             traducirError(ex);
         }
-          inicartbale2();
-        iniciartable1();
+       
         
     }//GEN-LAST:event_Btn_ReplicarActionPerformed
 
     private void jC_TablaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_TablaItemStateChanged
 
-
-   
            inicartbale2();
          iniciartable1();
 
     }//GEN-LAST:event_jC_TablaItemStateChanged
 
-    private void traducirError(SQLException e) {
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+           inicartbale2();
+        iniciartable1();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private static void traducirError(SQLException e) {
         String mensaje = e.getMessage();
         String mensaje2;
 
@@ -357,7 +376,7 @@ public class Main extends javax.swing.JFrame {
             mensaje2 = "Ocurrió un error inesperado: " + mensaje + ". Por favor, intente nuevamente.";
         }
 
-        System.out.println("Error: " + mensaje2);
+     
         JOptionPane.showMessageDialog(null, mensaje2);
 }
     
@@ -395,7 +414,7 @@ public class Main extends javax.swing.JFrame {
                 try {
                     new Main().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    traducirError(ex);
                 }
             }
         });
@@ -411,6 +430,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Replicar;
     private javax.swing.JTable JTable_Base1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jC_Tabla;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

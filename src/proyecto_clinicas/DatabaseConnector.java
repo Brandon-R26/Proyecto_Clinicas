@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import javax.swing.JOptionPane;
 
 public class DatabaseConnector {
 
@@ -28,8 +29,7 @@ public class DatabaseConnector {
             Class.forName("oracle.jdbc.OracleDriver");
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al cargar los drivers JDBC");
+             traducirError2(e);
         }
     }
 
@@ -80,7 +80,7 @@ public class DatabaseConnector {
                 mysqlConnection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           traducirError(e);
         }
     }
 
@@ -94,7 +94,7 @@ public class DatabaseConnector {
                 mysqlConnection.commit();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           traducirError(e);
             rollbackAll();
         }
     }
@@ -109,7 +109,96 @@ public class DatabaseConnector {
                 mysqlConnection.rollback();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            traducirError(e);
         }
     }
+    
+     private static void traducirError2(ClassNotFoundException e) {
+        String mensaje = e.getMessage();
+        String mensaje2;
+
+        if (mensaje == null || mensaje.isEmpty()) {
+            mensaje2 = "Ocurrió un error inesperado. Por favor, intente nuevamente.";
+        } else if (mensaje.contains("Duplicate entry")) {
+            mensaje2 = "Parece que ya existe un registro con este valor. Por favor, verifica e intente nuevamente.";
+        } else if (mensaje.contains("Incorrect integer value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número entero correcto o de no dejar vacio los identificadores.";
+        } else if (mensaje.contains("Access denied")) {
+            mensaje2 = "No tienes permiso para realizar esta acción. Verifica tus credenciales e intente nuevamente.";
+        } else if (mensaje.contains("SQL syntax")) {
+            mensaje2 = "Hubo un problema con la consulta. Por favor, verifica la información e intente nuevamente.";
+        } else if (mensaje.contains("foreign key constraint")) {
+           
+                mensaje2 = "No se puede dejar en blanco un identificador secundario o escoger uno que no existe, agrege uno existente e intente nuevamente.";
+            
+
+        } else if (mensaje.contains("Data too long")) {
+            mensaje2 = "El dato ingresado es demasiado largo. Por favor, verifica la longitud del dato e intente nuevamente.";
+        } else if (mensaje.contains("No database selected")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, selecciona una base de datos e intente nuevamente.";
+        } else if (mensaje.contains("connection closed")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, Conectese a una Base de Datos e intente nuevamente.";
+        } else if (mensaje.contains("Invalid date format")) {
+            mensaje2 = "El formato de la fecha ingresada no es válido. Por favor, verifica el formato e intente nuevamente.";
+        } else if (mensaje.contains("Cannot add or update a child row")) {
+            mensaje2 = "No se puede agregar o actualizar un registro debido a una relación con otro registro. Verifica que los registros relacionados existan e intente nuevamente.";
+        } else if (mensaje.contains("Data truncation")) {
+            mensaje2 = "Parece que hay un problema con los datos ingresados. Por favor, revisa que estén correctos y en el formato adecuado.";
+        } else if (mensaje.contains("Incorrect decimal value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número decimal correcto.";
+        } else if (mensaje.contains("Check constraint")) {
+
+            mensaje2 = "accion restringida esta tratando de ingresar un valor no permitido. Por favor, verifica los datos e intente nuevamente.";
+
+        } else {
+            mensaje2 = "Ocurrió un error inesperado: " + mensaje + ". Por favor, intente nuevamente.";
+        }
+
+      
+        JOptionPane.showMessageDialog(null, mensaje2);
+}
+       private static void traducirError(SQLException e) {
+        String mensaje = e.getMessage();
+        String mensaje2;
+
+        if (mensaje == null || mensaje.isEmpty()) {
+            mensaje2 = "Ocurrió un error inesperado. Por favor, intente nuevamente.";
+        } else if (mensaje.contains("Duplicate entry")) {
+            mensaje2 = "Parece que ya existe un registro con este valor. Por favor, verifica e intente nuevamente.";
+        } else if (mensaje.contains("Incorrect integer value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número entero correcto o de no dejar vacio los identificadores.";
+        } else if (mensaje.contains("Access denied")) {
+            mensaje2 = "No tienes permiso para realizar esta acción. Verifica tus credenciales e intente nuevamente.";
+        } else if (mensaje.contains("SQL syntax")) {
+            mensaje2 = "Hubo un problema con la consulta. Por favor, verifica la información e intente nuevamente.";
+        } else if (mensaje.contains("foreign key constraint")) {
+           
+                mensaje2 = "No se puede dejar en blanco un identificador secundario o escoger uno que no existe, agrege uno existente e intente nuevamente.";
+            
+
+        } else if (mensaje.contains("Data too long")) {
+            mensaje2 = "El dato ingresado es demasiado largo. Por favor, verifica la longitud del dato e intente nuevamente.";
+        } else if (mensaje.contains("No database selected")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, selecciona una base de datos e intente nuevamente.";
+        } else if (mensaje.contains("connection closed")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, Conectese a una Base de Datos e intente nuevamente.";
+        } else if (mensaje.contains("Invalid date format")) {
+            mensaje2 = "El formato de la fecha ingresada no es válido. Por favor, verifica el formato e intente nuevamente.";
+        } else if (mensaje.contains("Cannot add or update a child row")) {
+            mensaje2 = "No se puede agregar o actualizar un registro debido a una relación con otro registro. Verifica que los registros relacionados existan e intente nuevamente.";
+        } else if (mensaje.contains("Data truncation")) {
+            mensaje2 = "Parece que hay un problema con los datos ingresados. Por favor, revisa que estén correctos y en el formato adecuado.";
+        } else if (mensaje.contains("Incorrect decimal value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número decimal correcto.";
+        } else if (mensaje.contains("Check constraint")) {
+
+            mensaje2 = "accion restringida esta tratando de ingresar un valor no permitido. Por favor, verifica los datos e intente nuevamente.";
+
+        } else {
+            mensaje2 = "Ocurrió un error inesperado: " + mensaje + ". Por favor, intente nuevamente.";
+        }
+
+        
+        JOptionPane.showMessageDialog(null, mensaje2);
+}
 }

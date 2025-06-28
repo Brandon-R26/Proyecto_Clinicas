@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +31,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main() throws SQLException {
         initComponents();
+        
         try {
             coneccionOracle = dbConnector.getOracleConnection();
             coneccionMySQL = dbConnector.getMySQLConnection();
@@ -36,9 +39,9 @@ public class Main extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        inicartbale2();
+     
+   inicartbale2();
         iniciartable1();
-
     }
 
     void inicartbale2() {
@@ -65,36 +68,40 @@ public class Main extends javax.swing.JFrame {
             jTable_Base2.setModel(modelo);
 
         } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+           traducirError(ex);
         }
     }
 
     void iniciartable1() {
 
-        String sql1 = "Select * from " + jC_Tabla.getSelectedItem().toString() + " ORDER BY 1 DESC LIMIT 5";
+        String sql1 = "SELECT * FROM " + jC_Tabla.getSelectedItem() + " ORDER BY 1 DESC FETCH FIRST 5 ROWS ONLY";
         DefaultTableModel modelo1 = (DefaultTableModel) JTable_Base1.getModel();
         modelo1.setRowCount(0);
         modelo1.setColumnCount(0);
-        try {
-            pstoc = coneccionOracle.prepareStatement(sql1);
-            ResultSet rs = pst.executeQuery(sql1);
-            metaoc = (ResultSetMetaData) rs.getMetaData();
-            int columnas = meta.getColumnCount();
-            for (int i = 1; i <= columnas; i++) {
-                modelo1.addColumn(meta.getColumnLabel(i));
-            }
-            while (rs.next()) {
-                Object[] fila = new Object[columnas];
-                for (int i = 0; i < columnas; i++) {
-                    fila[i] = rs.getObject(i + 1);
-                }
-                modelo1.addRow(fila);
-            }
-            JTable_Base1.setModel(modelo1);
+       try {
+    PreparedStatement pstoc = coneccionOracle.prepareStatement(sql1);
+    ResultSet rs = pstoc.executeQuery();
+            java.sql.ResultSetMetaData metaoc = rs.getMetaData(); 
 
-        } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+    int columnas = metaoc.getColumnCount();
+
+    for (int i = 1; i <= columnas; i++) {
+        modelo1.addColumn(metaoc.getColumnLabel(i));
+    }
+
+    while (rs.next()) {
+        Object[] fila = new Object[columnas];
+        for (int i = 0; i < columnas; i++) {
+            fila[i] = rs.getObject(i + 1);
         }
+        modelo1.addRow(fila);
+    }
+
+    JTable_Base1.setModel(modelo1);
+
+} catch (SQLException ex) {
+    traducirError(ex);
+}
     }
 
     /**
@@ -117,6 +124,7 @@ public class Main extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -207,6 +215,13 @@ public class Main extends javax.swing.JFrame {
 
         jLabel5.setText("MySQL");
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -227,13 +242,17 @@ public class Main extends javax.swing.JFrame {
                 .addGap(196, 196, 196))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Btn_Replicar)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 553, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(83, 83, 83)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE))
+                        .addGap(400, 400, 400)
+                        .addComponent(Btn_Replicar)))
+                .addGap(101, 101, 101)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 539, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,9 +275,11 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addComponent(Btn_Replicar)
-                .addGap(126, 126, 126))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Btn_Replicar)
+                    .addComponent(jButton1))
+                .addGap(130, 130, 130))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -277,33 +298,88 @@ public class Main extends javax.swing.JFrame {
 
     private void Btn_ReplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_ReplicarActionPerformed
 
-
-    }//GEN-LAST:event_Btn_ReplicarActionPerformed
-
-    private void jC_TablaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_TablaItemStateChanged
-
-
-        try (CallableStatement stmt1 = coneccionOracle.prepareCall("{call replicar_mysql_a_oracle}")) {
+     try (CallableStatement stmt1 = coneccionOracle.prepareCall("{call replicar_mysql_a_oracle}")) {
             stmt1.execute();
             System.out.println("replicar_mysql_a_oracle ejecutado correctamente.");
         } catch (SQLException ex) {
+             traducirError(ex);
         }
         try (var stmt2 = coneccionOracle.prepareCall("{call replicar_oracle_a_mysql}")) {
             stmt2.execute();
             System.out.println("replicar_oracle_a_mysql ejecutado correctamente.");
         } catch (SQLException ex) {
+             traducirError(ex);
 
         }
         try {
             coneccionOracle.commit();
         } catch (SQLException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            traducirError(ex);
         }
+          inicartbale2();
+        iniciartable1();
+        
+    }//GEN-LAST:event_Btn_ReplicarActionPerformed
+
+    private void jC_TablaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_TablaItemStateChanged
+
+
+   
            inicartbale2();
-          iniciartable1();
+         iniciartable1();
 
     }//GEN-LAST:event_jC_TablaItemStateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void traducirError(SQLException e) {
+        String mensaje = e.getMessage();
+        String mensaje2;
+
+        if (mensaje == null || mensaje.isEmpty()) {
+            mensaje2 = "Ocurrió un error inesperado. Por favor, intente nuevamente.";
+        } else if (mensaje.contains("Duplicate entry")) {
+            mensaje2 = "Parece que ya existe un registro con este valor. Por favor, verifica e intente nuevamente.";
+        } else if (mensaje.contains("Incorrect integer value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número entero correcto o de no dejar vacio los identificadores.";
+        } else if (mensaje.contains("Access denied")) {
+            mensaje2 = "No tienes permiso para realizar esta acción. Verifica tus credenciales e intente nuevamente.";
+        } else if (mensaje.contains("SQL syntax")) {
+            mensaje2 = "Hubo un problema con la consulta. Por favor, verifica la información e intente nuevamente.";
+        } else if (mensaje.contains("foreign key constraint")) {
+           
+                mensaje2 = "No se puede dejar en blanco un identificador secundario o escoger uno que no existe, agrege uno existente e intente nuevamente.";
+            
+
+        } else if (mensaje.contains("Data too long")) {
+            mensaje2 = "El dato ingresado es demasiado largo. Por favor, verifica la longitud del dato e intente nuevamente.";
+        } else if (mensaje.contains("No database selected")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, selecciona una base de datos e intente nuevamente.";
+        } else if (mensaje.contains("connection closed")) {
+            mensaje2 = "No se ha seleccionado una base de datos. Por favor, Conectese a una Base de Datos e intente nuevamente.";
+        } else if (mensaje.contains("Invalid date format")) {
+            mensaje2 = "El formato de la fecha ingresada no es válido. Por favor, verifica el formato e intente nuevamente.";
+        } else if (mensaje.contains("Cannot add or update a child row")) {
+            mensaje2 = "No se puede agregar o actualizar un registro debido a una relación con otro registro. Verifica que los registros relacionados existan e intente nuevamente.";
+        } else if (mensaje.contains("Data truncation")) {
+            mensaje2 = "Parece que hay un problema con los datos ingresados. Por favor, revisa que estén correctos y en el formato adecuado.";
+        } else if (mensaje.contains("Incorrect decimal value")) {
+            mensaje2 = "El valor ingresado no es válido. Asegúrate de ingresar un número decimal correcto.";
+        } else if (mensaje.contains("Check constraint")) {
+
+            mensaje2 = "accion restringida esta tratando de ingresar un valor no permitido. Por favor, verifica los datos e intente nuevamente.";
+
+        } else {
+            mensaje2 = "Ocurrió un error inesperado: " + mensaje + ". Por favor, intente nuevamente.";
+        }
+
+        System.out.println("Error: " + mensaje2);
+        JOptionPane.showMessageDialog(null, mensaje2);
+}
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -342,6 +418,8 @@ public class Main extends javax.swing.JFrame {
             }
         });
     }
+    
+    
     PreparedStatement pst = null;
     Connection coneccionOracle = null;
     Connection coneccionMySQL = null;
@@ -351,6 +429,7 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Replicar;
     private javax.swing.JTable JTable_Base1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jC_Tabla;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

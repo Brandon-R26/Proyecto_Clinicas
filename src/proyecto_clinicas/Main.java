@@ -6,6 +6,7 @@ package proyecto_clinicas;
 
 import com.mysql.cj.jdbc.result.ResultSetMetaData;
 import java.beans.Statement;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author brhb2
@@ -23,24 +25,24 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
+    DatabaseConnector dbConnector = new DatabaseConnector();
 
-     DatabaseConnector dbConnector = new DatabaseConnector();
     public Main() throws SQLException {
         initComponents();
         try {
             coneccionOracle = dbConnector.getOracleConnection();
             coneccionMySQL = dbConnector.getMySQLConnection();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-           inicartbale2();
-           iniciartable1();
-         
+        inicartbale2();
+        iniciartable1();
+
     }
 
     void inicartbale2() {
-       
+
         String sql = "SELECT * FROM " + jC_Tabla.getSelectedItem().toString() + " ORDER BY 1 DESC LIMIT 5";
         DefaultTableModel modelo = (DefaultTableModel) jTable_Base2.getModel();
         modelo.setRowCount(0);
@@ -66,33 +68,35 @@ public class Main extends javax.swing.JFrame {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    void iniciartable1(){
-        
-             String sql1 = "Select * from "+jC_Tabla.getSelectedItem().toString()+ " ORDER BY 1 DESC LIMIT 5";
-         DefaultTableModel modelo1 = (DefaultTableModel) JTable_Base1.getModel();
-         modelo1.setRowCount(0);
-         modelo1.setColumnCount(0);
-         try {
-             pstoc = coneccionOracle.prepareStatement(sql1);
-             ResultSet rs = pst.executeQuery(sql1);
-             metaoc = (ResultSetMetaData) rs.getMetaData();
-             int columnas = meta.getColumnCount();
-             for (int i = 1; i <= columnas; i++) {
+
+    void iniciartable1() {
+
+        String sql1 = "Select * from " + jC_Tabla.getSelectedItem().toString() + " ORDER BY 1 DESC LIMIT 5";
+        DefaultTableModel modelo1 = (DefaultTableModel) JTable_Base1.getModel();
+        modelo1.setRowCount(0);
+        modelo1.setColumnCount(0);
+        try {
+            pstoc = coneccionOracle.prepareStatement(sql1);
+            ResultSet rs = pst.executeQuery(sql1);
+            metaoc = (ResultSetMetaData) rs.getMetaData();
+            int columnas = meta.getColumnCount();
+            for (int i = 1; i <= columnas; i++) {
                 modelo1.addColumn(meta.getColumnLabel(i));
             }
-             while (rs.next()) {
+            while (rs.next()) {
                 Object[] fila = new Object[columnas];
                 for (int i = 0; i < columnas; i++) {
                     fila[i] = rs.getObject(i + 1);
                 }
                 modelo1.addRow(fila);
             }
-             JTable_Base1.setModel(modelo1);
-             
-         } catch (SQLException ex) {
-             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-         }
+            JTable_Base1.setModel(modelo1);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -272,14 +276,32 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Btn_ReplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Btn_ReplicarActionPerformed
-      
-        
-        
+
+
     }//GEN-LAST:event_Btn_ReplicarActionPerformed
 
     private void jC_TablaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jC_TablaItemStateChanged
-            inicartbale2();
-           iniciartable1();
+
+
+        try (CallableStatement stmt1 = coneccionOracle.prepareCall("{call replicar_mysql_a_oracle}")) {
+            stmt1.execute();
+            System.out.println("replicar_mysql_a_oracle ejecutado correctamente.");
+        } catch (SQLException ex) {
+        }
+        try (var stmt2 = coneccionOracle.prepareCall("{call replicar_oracle_a_mysql}")) {
+            stmt2.execute();
+            System.out.println("replicar_oracle_a_mysql ejecutado correctamente.");
+        } catch (SQLException ex) {
+
+        }
+        try {
+            coneccionOracle.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           inicartbale2();
+          iniciartable1();
+
     }//GEN-LAST:event_jC_TablaItemStateChanged
 
     /**
@@ -325,7 +347,7 @@ public class Main extends javax.swing.JFrame {
     Connection coneccionMySQL = null;
     ResultSetMetaData meta = null;
     ResultSetMetaData metaoc = null;
-      PreparedStatement pstoc = null;
+    PreparedStatement pstoc = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Btn_Replicar;
     private javax.swing.JTable JTable_Base1;

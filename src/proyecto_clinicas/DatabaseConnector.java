@@ -44,7 +44,7 @@ public class DatabaseConnector {
             props.setProperty("user", ORACLE_USER);
             props.setProperty("password", ORACLE_PASSWORD);
             props.setProperty("oracle.net.CONNECT_TIMEOUT", "2000");
-
+            
             oracleConnection = DriverManager.getConnection(ORACLE_JDBC_URL, props);
             oracleConnection.setAutoCommit(false); // Para controlar transacciones manualmente
             System.out.println("coneccion exitosa");
